@@ -22,7 +22,17 @@ Which means:
 
 Simplicity.
 
-In Java, well with this client ```resp4j```, all you have to do is the following:
+In Java, all you have to do is add the following maven dependency:
+
+```xml
+<dependency>
+    <groupId>com.foogaro.util</groupId>
+    <artifactId>resp4j</artifactId>
+    <version>0.3.16</version>
+</dependency>
+```
+
+And your code will look like the following:
 
 ```java
 String[] commands = new String[]{"SET", "name", "Luigi"};

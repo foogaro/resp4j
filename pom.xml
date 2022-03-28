@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.foogaro.util</groupId>
     <artifactId>resp4j</artifactId>
-    <version>0.3.3</version>
+    <version>0.3.4-SNAPSHOT</version>
     <name>resp4j</name>
     <description>A simple client to write commands using the RESP (REdis Serialization Protocol) protocol.</description>
     <url>https://github.com/foogaro/resp4j</url>
@@ -29,7 +29,7 @@
         <connection>${project.scm.developerConnection}</connection>
         <url>${project.url}</url>
         <developerConnection>scm:git:https://github.com/foogaro/resp4j.git</developerConnection>
-        <tag>v0.3.3</tag>
+        <tag>v0.3.1</tag>
     </scm>
 
     <distributionManagement>

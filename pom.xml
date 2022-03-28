@@ -4,7 +4,7 @@
 
     <groupId>com.foogaro.util</groupId>
     <artifactId>resp4j</artifactId>
-    <version>0.3.10-SNAPSHOT</version>
+    <version>0.3.10</version>
 
     <packaging>jar</packaging>
 
@@ -33,7 +33,7 @@
         <connection>${project.scm.developerConnection}</connection>
         <url>${project.url}</url>
         <developerConnection>scm:git:https://github.com/foogaro/resp4j.git</developerConnection>
-        <tag>v0.3.5</tag>
+        <tag>ù</tag>
     </scm>
 
     <distributionManagement>

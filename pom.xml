@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.foogaro</groupId>
 	<artifactId>resp4j</artifactId>
-	<version>0.1.0</version>
+	<version>0.2.0</version>
 	<name>resp4j</name>
 
 	<properties>
@@ -16,7 +16,16 @@
 		<maven.test.source>11</maven.test.source>
 		<maven.test.target>11</maven.test.target>
 		<java.version>11</java.version>
+		<slf4j-api.version>1.7.36</slf4j-api.version>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>${slf4j-api.version}</version>
+		</dependency>
+	</dependencies>
 
 	<build>
 		<plugins>

@@ -38,12 +38,12 @@
 
     <distributionManagement>
         <snapshotRepository>
-            <id>snapshot-ossrh</id>
+            <id>staging-ossrh</id>
             <name>Sonatype Nexus Snapshots</name>
             <url>https://s01.oss.sonatype.org/content/repositories/snapshots/</url>
         </snapshotRepository>
         <repository>
-            <id>staging-ossrh</id>
+            <id>release-ossrh</id>
             <name>Nexus Release Repository</name>
             <url>https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
@@ -76,13 +76,13 @@
 
     <profiles>
         <profile>
-            <id>staging</id>
+            <id>staging-ossrh</id>
             <properties>
                 <connectionUrl>${distributionManagement.snapshotRepository.url}</connectionUrl>
             </properties>
         </profile>
         <profile>
-            <id>releases</id>
+            <id>release-ossrh</id>
             <properties>
                 <connectionUrl>${distributionManagement.repository.url}</connectionUrl>
             </properties>
@@ -173,7 +173,7 @@
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseProfiles>staging</releaseProfiles>
+                    <releaseProfiles>release-ossrh</releaseProfiles>
                 </configuration>
             </plugin>
         </plugins>

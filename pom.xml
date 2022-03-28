@@ -78,13 +78,13 @@
         <profile>
             <id>staging-ossrh</id>
             <properties>
-                <stagingRepository>${distributionManagement.snapshotRepository.url}</stagingRepository>
+                <stagingRepository>${project.distributionManagement.snapshotRepository.url}</stagingRepository>
             </properties>
         </profile>
         <profile>
             <id>release-ossrh</id>
             <properties>
-                <stagingRepository>${distributionManagement.repository.url}</stagingRepository>
+                <stagingRepository>${project.distributionManagement.repository.url}</stagingRepository>
             </properties>
         </profile>
     </profiles>

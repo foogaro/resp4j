@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
+
     <groupId>com.foogaro.util</groupId>
     <artifactId>resp4j</artifactId>
     <version>0.3.7-SNAPSHOT</version>
+
+    <packaging>jar</packaging>
+
     <name>resp4j</name>
     <description>A simple client to write commands using the RESP (REdis Serialization Protocol) protocol.</description>
     <url>https://github.com/foogaro/resp4j</url>
@@ -69,6 +73,21 @@
             <version>${slf4j-api.version}</version>
         </dependency>
     </dependencies>
+
+    <profiles>
+        <profile>
+            <id>staging</id>
+            <properties>
+                <connectionUrl>${distributionManagement.snapshotRepository.url}</connectionUrl>
+            </properties>
+        </profile>
+        <profile>
+            <id>releases</id>
+            <properties>
+                <connectionUrl>${distributionManagement.repository.url}</connectionUrl>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <plugins>
@@ -154,7 +173,7 @@
                 <configuration>
                     <tagNameFormat>v@{project.version}</tagNameFormat>
                     <autoVersionSubmodules>true</autoVersionSubmodules>
-                    <releaseProfiles>releases</releaseProfiles>
+                    <releaseProfiles>staging</releaseProfiles>
                 </configuration>
             </plugin>
         </plugins>

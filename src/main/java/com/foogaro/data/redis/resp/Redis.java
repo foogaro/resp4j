@@ -1,12 +1,17 @@
 package com.foogaro.data.redis.resp;
 
+import com.foogaro.data.redis.resp.exceptions.RedisError;
+import com.foogaro.data.redis.resp.exceptions.RedisException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.*;
 import java.net.Socket;
 import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
 
 public class Redis {
+
+    private final Logger logger = LoggerFactory.getLogger(Redis.class);
 
     private final Encoder writer;
     private final Parser reader;
@@ -17,7 +22,7 @@ public class Redis {
 
 
     public Redis() throws IOException {
-        this(new Socket(default_redis_host, default_redis_port), 1 << default_redis_input_buffer_size, 1 << default_redis_output_buffer_size);
+            this(new Socket(default_redis_host, default_redis_port), 1 << default_redis_input_buffer_size, 1 << default_redis_output_buffer_size);
     }
 
     public Redis(Socket socket) throws IOException {
@@ -32,62 +37,47 @@ public class Redis {
     }
 
     public Redis(InputStream inputStream, OutputStream outputStream) {
-        this.reader = new Parser(inputStream);
-        this.writer = new Encoder(outputStream);
+        reader = new Parser(inputStream);
+        writer = new Encoder(outputStream);
     }
 
-    public <T> T call(Object... args) throws IOException {
-        writer.write(Arrays.asList(args));
-        writer.flush();
-        return read();
+    public <T> T call(Object... args) throws RedisException, RedisError {
+        if (logger.isDebugEnabled()) {
+            Arrays.stream(args).forEach(o -> logger.debug("Arguments: {}", args));
+        }
+        try {
+            writer.write(Arrays.asList(args));
+            writer.flush();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        T result = read();
+        if (logger.isDebugEnabled()) {
+            logger.debug("Result: {}", result);
+        }
+        return result;
     }
 
-    public <T> T read() throws IOException {
+    public <T> T read() throws RedisException, RedisError {
         return (T) reader.parse();
-    }
-
-    public static abstract class Pipeline {
-        public abstract Pipeline call(String... args) throws IOException;
-        public abstract List<Object> read() throws IOException;
-    }
-
-    public Pipeline pipeline() {
-        return new Pipeline() {
-            private int n = 0;
-
-            public Pipeline call(String... args) throws IOException {
-                writer.write(Arrays.asList((Object[]) args));
-                writer.flush();
-                n++;
-                return this;
-            }
-
-            public List<Object> read() throws IOException {
-                List<Object> ret = new LinkedList<>();
-                while (n-- > 0) {
-                    ret.add(reader.parse());
-                }
-                return ret;
-            }
-        };
     }
 
     @FunctionalInterface
     public interface RedisClient<T, E extends Throwable> {
-        void accept(T t) throws E;
+        void accept(T t) throws E, RedisError;
     }
 
-    public static void run(RedisClient<Redis, IOException> callback, String addr, int port) throws IOException {
+    public static void run(RedisClient<Redis, IOException> callback, String addr, int port) throws IOException, RedisError {
         try (RedisConnection redis = connect(addr, port)) {
             callback.accept(redis);
         }
     }
 
-    public static void run(RedisClient<Redis, IOException> callback) throws IOException {
+    public static void run(RedisClient<Redis, IOException> callback) throws IOException, RedisError {
         run(callback,default_redis_host, default_redis_port);
     }
 
-    public static void run(RedisClient<Redis, IOException> callback, Socket s) throws IOException {
+    public static void run(RedisClient<Redis, IOException> callback, Socket s) throws IOException, RedisError {
         callback.accept(new Redis(s));
     }
 
@@ -103,9 +93,14 @@ public class Redis {
         Socket s = new Socket(host, port);
         return new RedisConnection(s) {
             @Override
-            public void close() throws IOException {
-                call("QUIT");
-                s.close();
+            public void close() throws RedisException {
+                try {
+                    call("QUIT");
+                    s.close();
+                } catch (IOException | RedisError e) {
+                    e.printStackTrace();
+                    throw new RedisException(e);
+                }
             }
         };
     }

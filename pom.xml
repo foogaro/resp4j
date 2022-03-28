@@ -63,7 +63,7 @@
         <maven.test.target>11</maven.test.target>
         <java.version>11</java.version>
         <slf4j-api.version>1.7.36</slf4j-api.version>
-        <sonatype.version>1.6.7</sonatype.version>
+        <sonatype.version>1.6.8</sonatype.version>
     </properties>
 
     <dependencies>

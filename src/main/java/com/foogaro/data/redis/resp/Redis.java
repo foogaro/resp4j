@@ -43,7 +43,7 @@ public class Redis {
 
     public <T> T call(Object... args) throws RedisException, RedisError {
         if (logger.isDebugEnabled()) {
-            Arrays.stream(args).forEach(o -> logger.debug("Arguments: {}", args));
+            Arrays.stream(args).forEach(o -> logger.debug("Arguments: {}", o));
         }
         try {
             writer.write(Arrays.asList(args));
